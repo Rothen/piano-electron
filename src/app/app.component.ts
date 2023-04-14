@@ -4,6 +4,7 @@ import { NoteComponent } from './note/note.component';
 import { SONGS, Song } from './helpers/song';
 import { MidiKeyboardService } from './services/midi-keyboard/midi-keyboard.service';
 import { SongPlayerService } from './services/song-player/song-player.service';
+import { NotePlayerService } from './services/note-player/note-player.service';
 
 @Component({
     selector: 'app-root',
@@ -22,7 +23,11 @@ export class AppComponent implements OnInit {
     public pressedNote: Note | null = null;
     public score: number = null;
 
-    constructor(private midiKeyboardService: MidiKeyboardService, private songPlayerService: SongPlayerService) {}
+    constructor(
+        private midiKeyboardService: MidiKeyboardService,
+        private songPlayerService: SongPlayerService,
+        private notePlayerService: NotePlayerService
+    ) {}
 
     public ngOnInit(): void {
         this.midiKeyboardService.requestAccess().subscribe(midiAccess => {
@@ -37,6 +42,7 @@ export class AppComponent implements OnInit {
         });
 
         this.audioContext = new AudioContext();
+        this.notePlayerService.setAudioContext(this.audioContext);
         this.gainNode = this.audioContext.createGain();
         this.gainNode.connect(this.audioContext.destination);
         this.gainNode.gain.value = 0.05;
