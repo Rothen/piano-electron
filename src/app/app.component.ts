@@ -86,16 +86,12 @@ export class AppComponent implements OnInit {
 
         for (const note of this.notes) {
             const furthestNote = note.frequency <= 400 ? 260 : 540;
-            console.log(furthestNote, note.frequency);
             maxError += Math.abs(furthestNote - note.currentFrequency);
             currentError += Math.abs(note.currentFrequency - note.frequency);
         }
 
         const error = currentError / maxError;
         const score = Math.round((1 - error) * 100);
-
-        console.log('Error: ' + Math.round(error * 100));
-        console.log('Score: ' + score);
 
         this.score = score;
 
