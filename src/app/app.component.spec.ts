@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
-    
+
   });
 
   it('should create the app', () => {

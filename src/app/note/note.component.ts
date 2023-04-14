@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Note } from '../note';
-import { MidiKeyboardService, NoteEvent } from '../midi-keyboard.service';
+import { Note } from '../helpers/note';
+import { MidiKeyboardService, NoteEvent } from '../services/midi-keyboard/midi-keyboard.service';
 import { Subscription } from 'rxjs';
 
 @Component({

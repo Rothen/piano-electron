@@ -1,9 +1,9 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { NOTES, Note } from './note';
+import { NOTES, Note } from './helpers/note';
 import { NoteComponent } from './note/note.component';
-import { SONGS, Song } from './song';
-import { MidiKeyboardService } from './midi-keyboard.service';
-import { SongPlayerService } from './song-player.service';
+import { SONGS, Song } from './helpers/song';
+import { MidiKeyboardService } from './services/midi-keyboard/midi-keyboard.service';
+import { SongPlayerService } from './services/song-player/song-player.service';
 
 @Component({
     selector: 'app-root',

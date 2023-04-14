@@ -7,10 +7,10 @@ describe('NoteComponent', () => {
   let fixture: ComponentFixture<NoteComponent>;
 
   beforeEach(async () => {
-    
+
   });
 
   it('should create', () => {
-    
+
   });
 });

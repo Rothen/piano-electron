@@ -1,7 +1,7 @@
 import { Injectable, QueryList } from '@angular/core';
-import { Song } from './song';
-import { NOTES } from './note';
-import { NoteComponent } from './note/note.component';
+import { Song } from '../../helpers/song';
+import { NOTES } from '../../helpers/note';
+import { NoteComponent } from '../../note/note.component';
 
 interface SongNote {
     tact: number;
