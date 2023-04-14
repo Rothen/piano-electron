@@ -91,7 +91,6 @@ export class NoteComponent implements OnInit, OnDestroy {
 
     private createOscillator(frequency: number): OscillatorNode {
         const oscillator = this.audioContext.createOscillator();
-        // oscillator.connect(this.gainNode);
         oscillator.type = 'sine';
         oscillator.frequency.value = frequency;
 
