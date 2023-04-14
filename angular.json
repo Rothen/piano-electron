@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-electron": {
+    "piano": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -34,6 +34,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -112,27 +113,27 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "piano:build"
           },
           "configurations": {
             "dev": {
-              "browserTarget": "angular-electron:build:dev"
+              "browserTarget": "piano:build:dev"
             },
             "production": {
-              "browserTarget": "angular-electron:build:production"
+              "browserTarget": "piano:build:production"
             },
             "web": {
-              "browserTarget": "angular-electron:build:web"
+              "browserTarget": "piano:build:web"
             },
             "web-production": {
-              "browserTarget": "angular-electron:build:web-production"
+              "browserTarget": "piano:build:web-production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-electron:build"
+            "browserTarget": "piano:build"
           }
         },
         "test": {
@@ -145,6 +146,7 @@
             "inlineStyleLanguage": "scss",
             "scripts": [],
             "styles": [
+                "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "assets": [
@@ -168,7 +170,7 @@
         }
       }
     },
-    "angular-electron-e2e": {
+    "piano-e2e": {
       "root": "e2e",
       "projectType": "application",
       "architect": {
@@ -183,7 +185,7 @@
       }
     }
   },
-  "defaultProject": "angular-electron",
+  "defaultProject": "piano",
   "schematics": {
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true

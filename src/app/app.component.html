@@ -1,1 +1,34 @@
-<router-outlet></router-outlet>
+<div class="container" (mouseup)="noteReleased(null)">
+    <div class="keyboard">
+        <app-note *ngFor="let note of notes" [note]="note"
+            (onpress)="notePressed($event)"
+            (onrelease)="noteReleased($event)"
+            (onmovein)="noteEntered($event)"
+            [audioContext]="audioContext"
+            [gainNode]="gainNode"></app-note>
+    </div>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Lied</mat-label>
+            <mat-select [(value)]="selectedSong">
+                <mat-option *ngFor="let song of songs" [value]="song">
+                    {{song.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat-raised-button color="primary" (click)="playSong()">Spiele Lied</button>
+        <button mat-raised-button color="primary" (click)="playSongWithCustomNotes();calculateScore();">Überprüfen</button>
+        <button mat-raised-button color="warn" (click)="reset()">Zurücksetzen</button>
+    </div>
+    <!--<div style="display: flex; align-items: center;">
+        <button mat-icon-button matTooltip="Überprüfen" (click)="calculateScore()">
+            <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" matTooltip="Zurücksetzen" (click)="reset()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>-->
+    <h1>{{score !== null ? score + ' Punkte' : ''}}</h1>
+</div>

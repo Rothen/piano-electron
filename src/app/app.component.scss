@@ -1,3 +1,66 @@
-:host {
-  
+::ng-deep .container {
+    white-space: nowrap;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+mat-form-field {
+    margin-top: 20px;
+}
+
+button {
+    margin: 5px;
+}
+
+::ng-deep .keyboard {
+    width: 1232px;
+    height: 228px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+::ng-deep .octave {
+    display: inline-block;
+    padding: 0 6px 0 0;
+}
+
+::ng-deep .settingsBar {
+    padding-top: 8px;
+    font: 14px "Open Sans", "Lucida Grande", "Arial", sans-serif;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+    height: 30px;
+}
+
+::ng-deep .left {
+    width: 50%;
+    position: absolute;
+    left: 0;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.left span,
+::ng-deep .left input {
+    vertical-align: middle;
+}
+
+::ng-deep .right {
+    width: 50%;
+    position: absolute;
+    right: 0;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+::ng-deep .right span {
+    vertical-align: middle;
+}
+
+::ng-deep .right input {
+    vertical-align: baseline;
 }
