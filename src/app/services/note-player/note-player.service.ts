@@ -34,7 +34,7 @@ export class NotePlayerService {
         const index = this.oscillators.indexOf(oscillator);
         if (index >= 0) {
             this.oscillators.splice(index, 1);
-            if (this.oscillators.length == 0) {
+            if (this.oscillators.length === 0) {
                 this.gainNode.gain.linearRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
             }
             oscillator.stop(this.audioContext.currentTime + 1);

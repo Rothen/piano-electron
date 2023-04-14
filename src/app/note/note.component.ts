@@ -20,7 +20,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     @Output() onmoveout: EventEmitter<any> = new EventEmitter();
     @Output() frequencyChanged: EventEmitter<number> = new EventEmitter();
 
-    public isPlaying: boolean = false;
+    public isPlaying = false;
 
     private oscillator: OscillatorNode;
     private autoOscillator: OscillatorNode;
