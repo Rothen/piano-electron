@@ -6,7 +6,7 @@
     (mouseleave)="onmoveout.next(note)">
     <div *ngIf="!note.name.endsWith('#')" class="note-settings">
         <input type="range" orient="vertical" (input)="changeFrequency($event)" min="260"
-            max="540" [value]="note.current_frequency" />
+            max="540" [value]="note.currentFrequency" />
         <div class="note-index">
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;540</span>
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;470</span>
@@ -15,7 +15,7 @@
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;260</span>
         </div>
     </div>
-    <span class="current-frequency" *ngIf="!note.name.endsWith('#')">{{this.note.current_frequency | number: '1.0-0'}} Hz</span>
+    <span class="current-frequency" *ngIf="!note.name.endsWith('#')">{{this.note.currentFrequency | number: '1.0-0'}} Hz</span>
     <div class="note-name">
         {{note.name}}
     </div>

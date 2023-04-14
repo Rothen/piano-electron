@@ -43,6 +43,14 @@ export class MidiKeyboardService {
         });
     }
 
+    public noteOn(): Subject<NoteEvent> {
+        return this.noteOnSubject;
+    }
+
+    public noteOff(): Subject<NoteEvent> {
+        return this.noteOffSubject;
+    }
+
     private onAccessFailure(): void {
         console.log('Could not access your MIDI devices.');
     }
@@ -52,10 +60,10 @@ export class MidiKeyboardService {
         const note = message.data[1];
         const velocity = (message.data.length > 2) ? message.data[2] : 0;
 
-        if (command == NOTE_ON_COMMAND || command == NOTE_OFF_COMMAND) {
-            const noteOn = command == NOTE_ON_COMMAND && velocity > 0;
+        if (command === NOTE_ON_COMMAND || command === NOTE_OFF_COMMAND) {
+            const noteOn = command === NOTE_ON_COMMAND && velocity > 0;
 
-            this.dispatchNoteEvent(noteOn, midiInput, key, note)
+            this.dispatchNoteEvent(noteOn, midiInput, key, note);
         }
     }
 
@@ -69,13 +77,5 @@ export class MidiKeyboardService {
         }
 
         subject.next({midiInput, key, note});
-    }
-
-    public noteOn(): Subject<NoteEvent> {
-        return this.noteOnSubject;
-    }
-
-    public noteOff(): Subject<NoteEvent> {
-        return this.noteOffSubject;
     }
 }

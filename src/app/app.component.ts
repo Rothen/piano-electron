@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { NOTES, Note } from './note';
 import { NoteComponent } from './note/note.component';
 import { SONGS, Song } from './song';
@@ -10,16 +10,15 @@ import { SongPlayerService } from './song-player.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-    title = 'piano';
+export class AppComponent implements OnInit {
     @ViewChildren(NoteComponent) noteCompnents: QueryList<NoteComponent>;
 
+    public title = 'piano';
     public selectedSong: Song;
     public songs: Song[] = SONGS;
     public notes: Note[] = NOTES;
     public audioContext: AudioContext = null;
     public gainNode: GainNode;
-    public oscList: {}[] = [];
     public pressedNote: Note | null = null;
     public score: number = null;
 
@@ -42,17 +41,8 @@ export class AppComponent {
         this.gainNode.connect(this.audioContext.destination);
         this.gainNode.gain.value = 0.05;
         this.selectedSong = this.songs[0];
-        this.oscList = [];
 
-        this.setup();
-    }
-
-    public setup() {
-        document.addEventListener('mouseup', event => this.noteReleased(null))
-
-        for (let i = 0; i < 9; i++) {
-            this.oscList[i] = {};
-        }
+        document.addEventListener('mouseup', event => this.noteReleased(null));
     }
 
     public notePressed(note: Note) {
@@ -61,7 +51,7 @@ export class AppComponent {
             this.noteCompnents.get(this.notes.indexOf(note))?.playNote();
         }
     }
-    
+
     public noteReleased(note: Note | null) {
         if (this.pressedNote !== null) {
             this.noteCompnents.get(this.notes.indexOf(this.pressedNote))?.stopPlayingNote();
@@ -85,18 +75,17 @@ export class AppComponent {
     }
 
     public calculateScore(): number {
-        let max_error = 0;
-        let current_error = 0;
+        let maxError = 0;
+        let currentError = 0;
 
-        for (let i = 0; i < this.notes.length; i++) {
-            const note = this.notes[i];
-            const furthest_note = note.frequency <= 400 ? 260 : 540;
-            console.log(furthest_note, note.frequency);
-            max_error += Math.abs(furthest_note - note.current_frequency);
-            current_error += Math.abs(note.current_frequency - note.frequency);
+        for (const note of this.notes) {
+            const furthestNote = note.frequency <= 400 ? 260 : 540;
+            console.log(furthestNote, note.frequency);
+            maxError += Math.abs(furthestNote - note.currentFrequency);
+            currentError += Math.abs(note.currentFrequency - note.frequency);
         }
 
-        const error = current_error / max_error
+        const error = currentError / maxError;
         const score = Math.round((1 - error) * 100);
 
         console.log('Error: ' + Math.round(error * 100));
@@ -113,7 +102,7 @@ export class AppComponent {
 
         for (const note of this.notes) {
             if (note.name.indexOf('#') === -1) {
-                note.current_frequency = 260;
+                note.currentFrequency = 260;
             }
         }
     }

@@ -5,7 +5,7 @@ import { NoteComponent } from './note/note.component';
 
 interface SongNote {
     tact: number;
-    note_index: number;
+    noteIndex: number;
 }
 
 @Injectable({
@@ -15,17 +15,6 @@ export class SongPlayerService {
     private timeout: NodeJS.Timeout;
 
     constructor() { }
-
-    private getSongNotes(song: Song): SongNote[] {
-        const songNotes: SongNote[] = song.notes.split(';').map(el => {
-            return {
-                tact: parseInt(el.charAt(0)),
-                note_index: NOTES.findIndex(note => note.name == el.substring(1))
-            }
-        });
-
-        return songNotes;
-    }
 
     public playSong(song: Song, noteComponents: QueryList<NoteComponent>) {
         const songNotes = this.getSongNotes(song);
@@ -39,16 +28,31 @@ export class SongPlayerService {
         this.playCustomRecursive(song, songNotes, 0, noteComponents);
     }
 
+    public reset(): void {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+    }
+
+    private getSongNotes(song: Song): SongNote[] {
+        const songNotes: SongNote[] = song.notes.split(';').map(el => ({
+            tact: parseInt(el.charAt(0), 10),
+            noteIndex: NOTES.findIndex(note => note.name === el.substring(1))
+        }));
+
+        return songNotes;
+    }
+
     private playCustomRecursive(song: Song, songNotes: SongNote[], currentIndex: number, noteComponents: QueryList<NoteComponent>): void {
         if (currentIndex >= songNotes.length) {
             return;
         }
 
         const songNote = songNotes[currentIndex];
-        (noteComponents.get(songNotes[currentIndex].note_index) as NoteComponent).playNoteFor((songNote.tact * song.tact - song.tact / 2))
+        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent).playNoteFor((songNote.tact * song.tact - song.tact / 2));
 
         this.timeout = setTimeout(() => {
-            this.playCustomRecursive(song, songNotes, currentIndex + 1, noteComponents)
+            this.playCustomRecursive(song, songNotes, currentIndex + 1, noteComponents);
         }, (songNote.tact * song.tact) * 1000);
     }
 
@@ -58,16 +62,11 @@ export class SongPlayerService {
         }
 
         const songNote = songNotes[currentIndex];
-        (noteComponents.get(songNotes[currentIndex].note_index) as NoteComponent).playCorrectNoteFor((songNote.tact * song.tact - song.tact / 2))
+        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent)
+            .playCorrectNoteFor((songNote.tact * song.tact - song.tact / 2));
 
         this.timeout = setTimeout(() => {
-            this.playRecursive(song, songNotes, currentIndex + 1, noteComponents)
+            this.playRecursive(song, songNotes, currentIndex + 1, noteComponents);
         }, (songNote.tact * song.tact) * 1000);
-    }
-
-    public reset(): void {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
     }
 }

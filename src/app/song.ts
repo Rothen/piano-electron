@@ -11,5 +11,6 @@ export const SONGS = [{
 }, {
     name: 'Hänsel und Gretel',
     tact: 1 / 3,
-    notes: '2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3;2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3;1C3;1D;1D;1D;1E;2F;1D;1D;1E;1E;1E;1F;4G;2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3'
+    notes: '2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3;2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3\
+    ;1C3;1D;1D;1D;1E;2F;1D;1D;1E;1E;1E;1F;4G;2G;1E;1F;2G;1E;1C3;1D;1D;1D;1E;4C3'
 }];

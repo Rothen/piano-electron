@@ -17,9 +17,9 @@ export class NoteComponent implements OnInit, OnDestroy {
     @Output() onrelease: EventEmitter<any> = new EventEmitter();
     @Output() onmovein: EventEmitter<any> = new EventEmitter();
     @Output() onmoveout: EventEmitter<any> = new EventEmitter();
-    @Output() onFrequencyChanged: EventEmitter<number> = new EventEmitter();
+    @Output() frequencyChanged: EventEmitter<number> = new EventEmitter();
 
-    public isPlaying: boolean = false;
+    public isPlaying = false;
     private oscillator: OscillatorNode;
     private autoOscillator: OscillatorNode;
     private vol: GainNode;
@@ -45,7 +45,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     }
 
     public playNoteFor(time: number): void {
-        this.autoOscillator = this.createOscillator(this.note.current_frequency);
+        this.autoOscillator = this.createOscillator(this.note.currentFrequency);
         this.playFor(time, this.autoOscillator);
     }
 
@@ -54,17 +54,37 @@ export class NoteComponent implements OnInit, OnDestroy {
     }
 
     public playNote(): void {
-        this.play(this.note.current_frequency);
+        this.play(this.note.currentFrequency);
+    }
+
+    public stopPlayingNote(): void {
+        if (this.oscillator) {
+            this.vol.gain.linearRampToValueAtTime(0.001/5, this.audioContext.currentTime + 0.5);
+            this.oscillator.stop(this.audioContext.currentTime + 1);
+            this.isPlaying = false;
+            this.oscillator = null;
+        }
+    }
+
+    public changeFrequency(event: any) {
+        this.note.currentFrequency = event.target.value;
+        if (this.oscillator) {
+            this.oscillator.frequency.value = event.target.value;
+        }
+        if (this.autoOscillator) {
+            this.autoOscillator.frequency.value = event.target.value;
+        }
+        this.frequencyChanged.next(event.target.value);
     }
 
     private noteOn(noteEvent: NoteEvent): void {
-        if (noteEvent.note == this.note.midi_note) {
+        if (noteEvent.note === this.note.midiNote) {
             this.playNote();
         }
     }
 
     private noteOff(noteEvent: NoteEvent): void {
-        if (noteEvent.note == this.note.midi_note) {
+        if (noteEvent.note === this.note.midiNote) {
             this.stopPlayingNote();
         }
     }
@@ -87,7 +107,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     private playFor(time: number, oscillator: OscillatorNode): void {
         this.isPlaying = true;
         oscillator.start();
-        this.vol.gain.linearRampToValueAtTime(1/13, this.audioContext.currentTime + 0.03);
+        this.vol.gain.linearRampToValueAtTime(1/5, this.audioContext.currentTime + 0.03);
         this.vol.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + time + 0.03);
         oscillator.stop(this.audioContext.currentTime + time + 0.03);
         setTimeout(() => {
@@ -101,27 +121,7 @@ export class NoteComponent implements OnInit, OnDestroy {
             this.oscillator = this.createOscillator(frequency);
 
             this.oscillator.start();
-            this.vol.gain.linearRampToValueAtTime(1/13, this.audioContext.currentTime + 0.03);
+            this.vol.gain.linearRampToValueAtTime(1/5, this.audioContext.currentTime + 0.03);
         }
-    }
-
-    public stopPlayingNote(): void {
-        if (this.oscillator) {
-            this.vol.gain.linearRampToValueAtTime(0.001/13, this.audioContext.currentTime + 0.5);
-            this.oscillator.stop(this.audioContext.currentTime + 1);
-            this.isPlaying = false;
-            this.oscillator = null;
-        }
-    }
-
-    public changeFrequency(event: any) {
-        this.note.current_frequency = event.target.value;
-        if (this.oscillator) {
-            this.oscillator.frequency.value = event.target.value;
-        }
-        if (this.autoOscillator) {
-            this.autoOscillator.frequency.value = event.target.value;
-        }
-        this.onFrequencyChanged.next(event.target.value);
     }
 }
