@@ -45,7 +45,7 @@ export class NotePlayerService {
         }
     }
 
-    private createOscillator(frequency: number): { oscillator: OscillatorNode, gainNode: GainNode} {
+    private createOscillator(frequency: number): { oscillator: OscillatorNode; gainNode: GainNode } {
         const oscillator = this.audioContext.createOscillator();
         const gainNode = this.audioContext.createGain();
         gainNode.gain.value = 0;
