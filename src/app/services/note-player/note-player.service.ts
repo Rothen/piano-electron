@@ -5,38 +5,35 @@ import { Injectable } from '@angular/core';
 })
 export class NotePlayerService {
     private audioContext: AudioContext;
-    private gainNode: GainNode;
 
     private oscillators: OscillatorNode[] = [];
+    private gainNodes: GainNode[] = [];
 
     constructor() { }
 
     public setAudioContext(audioContext: AudioContext): void {
         this.audioContext = audioContext;
-        this.gainNode = this.audioContext.createGain();
-        this.gainNode.gain.value = 0;
-        this.gainNode.connect(this.audioContext.destination);
     }
 
     public playNoteFor(frequency: number, time: number): OscillatorNode {
-        const oscillator = this.createOscillator(frequency);
-        this.playFor(time, oscillator);
+        const {oscillator, gainNode} = this.createOscillator(frequency);
+        this.playFor(time, oscillator, gainNode);
         return oscillator;
     }
 
     public playNote(frequency: number): OscillatorNode {
-        const oscillator = this.createOscillator(frequency);
-        this.play(oscillator);
+        const { oscillator, gainNode } = this.createOscillator(frequency);
+        this.play(oscillator, gainNode);
         return oscillator;
     }
 
     public stopPlayingNote(oscillator: OscillatorNode): void {
         const index = this.oscillators.indexOf(oscillator);
         if (index >= 0) {
+            const gainNode = this.gainNodes[index];
             this.oscillators.splice(index, 1);
-            if (this.oscillators.length === 0) {
-                this.gainNode.gain.linearRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
-            }
+            this.gainNodes.splice(index, 1);
+            gainNode.gain.linearRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
             oscillator.stop(this.audioContext.currentTime + 1);
         }
     }
@@ -48,36 +45,36 @@ export class NotePlayerService {
         }
     }
 
-    private createOscillator(frequency: number): OscillatorNode {
+    private createOscillator(frequency: number): { oscillator: OscillatorNode, gainNode: GainNode} {
         const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.value = 0;
+        gainNode.connect(this.audioContext.destination);
         oscillator.type = 'sine';
         oscillator.frequency.value = frequency;
 
         const compressor = this.audioContext.createDynamicsCompressor();
 
-        oscillator.connect(this.gainNode).connect(compressor);
+        oscillator.connect(gainNode).connect(compressor);
         this.oscillators.push(oscillator);
-        return oscillator;
+        this.gainNodes.push(gainNode);
+        return {oscillator, gainNode};
     }
 
-    private playFor(time: number, oscillator: OscillatorNode): void {
+    private playFor(time: number, oscillator: OscillatorNode, gainNode: GainNode): void {
         oscillator.start();
-        if (this.oscillators.length === 1) {
-            this.gainNode.gain.linearRampToValueAtTime(1 / 5, this.audioContext.currentTime + 0.03);
-            this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + time + 0.03);
-        }
+        gainNode.gain.linearRampToValueAtTime(1 / 5, this.audioContext.currentTime + 0.03);
+        gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + time + 0.03);
         oscillator.stop(this.audioContext.currentTime + time + 0.03);
         setTimeout(() => {
             this.oscillators.splice(this.oscillators.indexOf(oscillator), 1);
         }, (time + 0.03) * 1000);
     }
 
-    private play(oscillator: OscillatorNode): OscillatorNode {
+    private play(oscillator: OscillatorNode, gainNode: GainNode): OscillatorNode {
         oscillator.start();
-        if (this.oscillators.length === 1) {
-            this.gainNode.gain.cancelScheduledValues(0.001);
-            this.gainNode.gain.linearRampToValueAtTime(1 / 5, this.audioContext.currentTime + 0.03);
-        }
+        gainNode.gain.cancelScheduledValues(0.001);
+        gainNode.gain.linearRampToValueAtTime(1 / 5, this.audioContext.currentTime + 0.03);
         return oscillator;
     }
 }
