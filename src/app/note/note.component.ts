@@ -72,15 +72,22 @@ export class NoteComponent implements OnInit, OnDestroy {
 
     public onSliderChange(event: any) {
         this.note.currentFrequency = parseInt(event.target.value, 10);
-        this.oscillators.forEach((oscillator, cotave) => this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
-        this.autoOscillators.forEach((autoOscillator, cotave) => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
+        this.oscillators.forEach((oscillator, cotave) => {
+            this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1));
+        });
+        this.autoOscillators.forEach((autoOscillator, cotave) => {
+            this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1));
+        });
         this.frequencyChanged.next(event.target.value);
     }
 
     public changeFrequency() {
-        this.oscillators.forEach((oscillator, cotave) => this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
-        this.autoOscillators.forEach((autoOscillator, cotave) => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
-        // this.autoOscillators.forEach(autoOscillator => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency));
+        this.oscillators.forEach((oscillator, cotave) => {
+            this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1));
+        });
+        this.autoOscillators.forEach((autoOscillator, cotave) => {
+            this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1));
+        });
         this.frequencyChanged.next(this.note.currentFrequency);
     }
 
