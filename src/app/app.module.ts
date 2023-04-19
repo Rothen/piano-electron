@@ -10,6 +10,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatButtonModule,
         MatSliderModule,
         MatIconModule,
-        MatTooltipModule
+        MatTooltipModule,
+        FormsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -14,6 +14,11 @@
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;320</span>
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;260</span>
         </div>
+        <div *ngIf="showResults" class="note-index" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}" style="left:50%;">
+            <span style="color: red; font-weight: bold; display: inline; font-size: 9pt; display: flex; align-items: center; flex-direction: row; justify-content: center;">{{note.frequency | number:'1.0-0'}}
+                <span style="height: 20px; line-height: 20px;font-size: 15pt;color: yellow; display: inline; -webkit-text-stroke: 1px red;-webkit-text-fill-color: yellow;"><mat-icon style="height: 20px; width: 20px; font-size: 20px;">close</mat-icon></span>
+            </span>
+        </div>
     </div>
     <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
         <button mat-icon-button class="small-icon-button" (click)="lower()">
@@ -24,7 +29,10 @@
             <mat-icon>add</mat-icon>
         </button>
     </div>
-    <!--<div class="note-name">
-        {{note.name}}
-    </div>-->
+    <div *ngIf="!note.name.endsWith('#') && showResults" class="note-name" style="color: red; margin-top: 15px;">
+        {{note.currentFrequency - note.frequency | number:'1.0-0'}} Hz
+    </div>
+    <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name" style="color: red; margin-top: 15px;">
+        &nbsp;
+    </div>
 </div>

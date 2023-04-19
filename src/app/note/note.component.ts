@@ -14,6 +14,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     @Input() note: Note;
     @Input() audioContext: AudioContext;
     @Input() gainNode: GainNode;
+    @Input() showResults: boolean;
 
     @Output() onpress: EventEmitter<any> = new EventEmitter();
     @Output() onrelease: EventEmitter<any> = new EventEmitter();

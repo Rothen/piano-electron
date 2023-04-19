@@ -4,18 +4,32 @@
             (onpress)="notePressed($event)"
             (onrelease)="noteReleased($event)"
             (onmovein)="noteEntered($event)"
-            [audioContext]="audioContext"
-            [gainNode]="gainNode"></app-note>
+            [showResults]="showResults"></app-note>
     </div>
-    <div>
-        <mat-form-field appearance="fill">
-            <mat-label>Lied</mat-label>
-            <mat-select [(value)]="selectedSong">
-                <mat-option *ngFor="let song of songs" [value]="song">
-                    {{song.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+    <div style="display: flex; align-items: center;flex-direction: row; justify-content: end; width: 100%;">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Lied</mat-label>
+                <mat-select [(value)]="selectedSong">
+                    <mat-option *ngFor="let song of songs" [value]="song">
+                        {{song.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="systemVolumeService.isElectron" style="display: flex; flex-direction: row; align-items: center; width: 400px;">
+            <input type="range" min="0" max="100" step="1" list="steplist" [(ngModel)]="systemVolume"
+                (change)="onSystemVolumeChanged($event)">
+            <datalist id="steplist">
+                <option>0</option>
+                <option>25</option>
+                <option>50</option>
+                <option>75</option>
+                <option>100</option>
+            </datalist>
+            <mat-icon>volume_down</mat-icon>
+            <span>{{systemVolume}}</span>
+        </div>
     </div>
     <div>
         <button mat-raised-button (click)="playSong()">Spiele Lied</button>

@@ -9,5 +9,6 @@
   "main": "main.js",
   "private": true,
   "dependencies": {
+    "loudness": "^0.4.1"
   }
 }

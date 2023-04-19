@@ -6,6 +6,7 @@ import { MidiKeyboardService } from './services/midi-keyboard/midi-keyboard.serv
 import { SongPlayerService } from './services/song-player/song-player.service';
 import { NotePlayerService } from './services/note-player/note-player.service';
 import { KonamiService } from './services/konami/konami.service';
+import { SystemVolumeService } from './services/system-volume/system-volume.service';
 
 @Component({
     selector: 'app-root',
@@ -21,15 +22,20 @@ export class AppComponent implements OnInit {
     public notes: Note[] = NOTES;
     public pressedNote: Note | null = null;
     public score: number = null;
+    public systemVolume = 0;
+    public showResults = false;
+
+    private isBlocked = false;
 
     constructor(
         private midiKeyboardService: MidiKeyboardService,
         private songPlayerService: SongPlayerService,
-        private notePlayerService: NotePlayerService,
+        public systemVolumeService: SystemVolumeService,
         private konamiService: KonamiService
     ) {}
 
     public ngOnInit(): void {
+        this.loadSystemVolume();
         this.konamiService.konami.subscribe(_ => this.notes.forEach(note => note.currentFrequency = note.frequency));
         this.midiKeyboardService.requestAccess().subscribe(midiAccess => {
             const offset = 48;
@@ -85,6 +91,7 @@ export class AppComponent implements OnInit {
     }
 
     public calculateScore(): number {
+        this.showResults = true;
         let maxError = 0;
         let currentError = 0;
 
@@ -103,6 +110,7 @@ export class AppComponent implements OnInit {
     }
 
     public reset(): void {
+        this.showResults = false;
         this.songPlayerService.reset();
         this.score = null;
 
@@ -111,5 +119,19 @@ export class AppComponent implements OnInit {
                 note.currentFrequency = 260;
             }
         }
+    }
+
+    public onSystemVolumeChanged(event: any): void {
+        if (!this.isBlocked) {
+            this.isBlocked = true;
+            this.systemVolumeService.setVolume(this.systemVolume).subscribe(_ => {
+                this.isBlocked = false;
+                this.loadSystemVolume();
+            });
+        }
+    }
+
+    private loadSystemVolume(): void {
+        this.systemVolumeService.getVolume().subscribe(volume => this.systemVolume = volume);
     }
 }
