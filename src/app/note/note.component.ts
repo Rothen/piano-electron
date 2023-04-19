@@ -71,25 +71,27 @@ export class NoteComponent implements OnInit, OnDestroy {
     }
 
     public onSliderChange(event: any) {
-        this.note.currentFrequency = event.target.value;
-        this.oscillators.forEach(oscillator => this.notePlayerService.changeFrequency(oscillator, event.target.value));
-        this.autoOscillators.forEach(autoOscillator => this.notePlayerService.changeFrequency(autoOscillator, event.target.value));
+        this.note.currentFrequency = parseInt(event.target.value, 10);
+        this.oscillators.forEach((oscillator, cotave) => this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
+        this.autoOscillators.forEach((autoOscillator, cotave) => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
         this.frequencyChanged.next(event.target.value);
     }
 
     public changeFrequency() {
-        this.oscillators.forEach(oscillator => this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency));
-        this.autoOscillators.forEach(autoOscillator => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency));
+        this.oscillators.forEach((oscillator, cotave) => this.notePlayerService.changeFrequency(oscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
+        this.autoOscillators.forEach((autoOscillator, cotave) => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency * Math.pow(2, cotave - 1)));
+        // this.autoOscillators.forEach(autoOscillator => this.notePlayerService.changeFrequency(autoOscillator, this.note.currentFrequency));
         this.frequencyChanged.next(this.note.currentFrequency);
     }
 
     public higher(): void {
+        console.log(this.note.currentFrequency);
         this.note.currentFrequency = Math.min(500, this.note.currentFrequency+1);
         this.changeFrequency();
     }
 
     public lower(): void {
-        this.note.currentFrequency = Math.max(260, this.note.currentFrequency - 1);
+        this.note.currentFrequency = Math.max(260, this.note.currentFrequency-1);
         this.changeFrequency();
     }
 
