@@ -17,12 +17,14 @@ export class SongPlayerService {
     constructor() { }
 
     public playSong(song: Song, noteComponents: QueryList<NoteComponent>) {
+        this.reset();
         const songNotes = this.getSongNotes(song);
 
         this.playRecursive(song, songNotes, 0, noteComponents);
     }
 
     public playSongWithCustomNotes(song: Song, noteComponents: QueryList<NoteComponent>) {
+        this.reset();
         const songNotes = this.getSongNotes(song);
 
         this.playCustomRecursive(song, songNotes, 0, noteComponents);

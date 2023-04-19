@@ -9,10 +9,8 @@ export class NotePlayerService {
     private oscillators: OscillatorNode[] = [];
     private gainNodes: GainNode[] = [];
 
-    constructor() { }
-
-    public setAudioContext(audioContext: AudioContext): void {
-        this.audioContext = audioContext;
+    constructor() {
+        this.audioContext = new AudioContext();
     }
 
     public playNoteFor(frequency: number, time: number): OscillatorNode {
@@ -23,6 +21,8 @@ export class NotePlayerService {
 
     public playNote(frequency: number): OscillatorNode {
         const { oscillator, gainNode } = this.createOscillator(frequency);
+        this.oscillators.push(oscillator);
+        this.gainNodes.push(gainNode);
         this.play(oscillator, gainNode);
         return oscillator;
     }
@@ -33,8 +33,8 @@ export class NotePlayerService {
             const gainNode = this.gainNodes[index];
             this.oscillators.splice(index, 1);
             this.gainNodes.splice(index, 1);
-            gainNode.gain.linearRampToValueAtTime(0.001, this.audioContext.currentTime + 0.5);
-            oscillator.stop(this.audioContext.currentTime + 1);
+            gainNode.gain.linearRampToValueAtTime(0., this.audioContext.currentTime + 0.5);
+            oscillator.stop(this.audioContext.currentTime + 0.5);
         }
     }
 
@@ -48,16 +48,11 @@ export class NotePlayerService {
     private createOscillator(frequency: number): { oscillator: OscillatorNode; gainNode: GainNode } {
         const oscillator = this.audioContext.createOscillator();
         const gainNode = this.audioContext.createGain();
-        gainNode.gain.value = 0;
         gainNode.connect(this.audioContext.destination);
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
         oscillator.type = 'sine';
         oscillator.frequency.value = frequency;
-
-        const compressor = this.audioContext.createDynamicsCompressor();
-
-        oscillator.connect(gainNode).connect(compressor);
-        this.oscillators.push(oscillator);
-        this.gainNodes.push(gainNode);
+        oscillator.connect(gainNode).connect(this.audioContext.createDynamicsCompressor());
         return {oscillator, gainNode};
     }
 
@@ -73,7 +68,6 @@ export class NotePlayerService {
 
     private play(oscillator: OscillatorNode, gainNode: GainNode): OscillatorNode {
         oscillator.start();
-        gainNode.gain.cancelScheduledValues(0.001);
         gainNode.gain.linearRampToValueAtTime(1 / 5, this.audioContext.currentTime + 0.03);
         return oscillator;
     }

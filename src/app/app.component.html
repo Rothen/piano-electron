@@ -18,17 +18,10 @@
         </mat-form-field>
     </div>
     <div>
-        <button mat-raised-button color="primary" (click)="playSong()">Spiele Lied</button>
-        <button mat-raised-button color="primary" (click)="playSongWithCustomNotes();calculateScore();">Überprüfen</button>
+        <button mat-raised-button (click)="playSong()">Spiele Lied</button>
+        <button mat-raised-button (click)="playSongWithCustomNotes()">Spiele Lied Eigene Töne</button>
+        <button mat-raised-button color="primary" (click)="calculateScore();">Überprüfen</button>
         <button mat-raised-button color="warn" (click)="reset()">Zurücksetzen</button>
     </div>
-    <!--<div style="display: flex; align-items: center;">
-        <button mat-icon-button matTooltip="Überprüfen" (click)="calculateScore()">
-            <mat-icon>check</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" matTooltip="Zurücksetzen" (click)="reset()">
-            <mat-icon>refresh</mat-icon>
-        </button>
-    </div>-->
     <h1>{{score !== null ? score + ' Punkte' : ''}}</h1>
 </div>

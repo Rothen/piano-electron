@@ -5,6 +5,7 @@ import { SONGS, Song } from './helpers/song';
 import { MidiKeyboardService } from './services/midi-keyboard/midi-keyboard.service';
 import { SongPlayerService } from './services/song-player/song-player.service';
 import { NotePlayerService } from './services/note-player/note-player.service';
+import { KonamiService } from './services/konami/konami.service';
 
 @Component({
     selector: 'app-root',
@@ -18,34 +19,37 @@ export class AppComponent implements OnInit {
     public selectedSong: Song;
     public songs: Song[] = SONGS;
     public notes: Note[] = NOTES;
-    public audioContext: AudioContext = null;
-    public gainNode: GainNode;
     public pressedNote: Note | null = null;
     public score: number = null;
 
     constructor(
         private midiKeyboardService: MidiKeyboardService,
         private songPlayerService: SongPlayerService,
-        private notePlayerService: NotePlayerService
+        private notePlayerService: NotePlayerService,
+        private konamiService: KonamiService
     ) {}
 
     public ngOnInit(): void {
+        this.konamiService.konami.subscribe(_ => this.notes.forEach(note => note.currentFrequency = note.frequency));
         this.midiKeyboardService.requestAccess().subscribe(midiAccess => {
             const offset = 48;
             this.midiKeyboardService.onAccessSuccess(midiAccess);
             this.midiKeyboardService.noteOn().subscribe(note => {
-                this.noteCompnents.get(note.note - offset).playNote();
+                const noteComponent = this.noteCompnents.get((note.note - offset)%12);
+                const octave = Math.floor((note.note - offset) / 12) + 1;
+                if (noteComponent) {
+                    noteComponent.playNote(octave);
+                }
             });
             this.midiKeyboardService.noteOff().subscribe(note => {
-                this.noteCompnents.get(note.note - offset).stopPlayingNote();
+                const noteComponent = this.noteCompnents.get((note.note - offset) % 12);
+                const octave = Math.floor((note.note - offset) / 12) + 1;
+                if (noteComponent) {
+                    noteComponent.stopPlayingNote(octave);
+                }
             });
         });
 
-        this.audioContext = new AudioContext();
-        this.notePlayerService.setAudioContext(this.audioContext);
-        this.gainNode = this.audioContext.createGain();
-        this.gainNode.connect(this.audioContext.destination);
-        this.gainNode.gain.value = 0.05;
         this.selectedSong = this.songs[0];
 
         document.addEventListener('mouseup', event => this.noteReleased(null));

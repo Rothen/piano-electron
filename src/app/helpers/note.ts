@@ -97,11 +97,11 @@ export const NOTES: Note[] = [{
     currentFrequency: 260,
     playing: false,
     hasSharpBefore: true
-}, {
+}/*, {
     name: 'C4',
     midiNote: 8,
     octave: 4,
     frequency: 523.2511,
     currentFrequency: 260,
     playing: false
-}];
+}*/];

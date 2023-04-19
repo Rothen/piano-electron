@@ -29,7 +29,7 @@ export class MidiKeyboardService {
     }
 
     public onAccessSuccess(midiAccess: any): void {
-        console.log('access success');
+        console.log('Connected to Midi Keyboard');
         this.midiAccess = midiAccess;
         this.inputs = midiAccess.inputs;
         this.outputs = midiAccess.outputs;

@@ -5,18 +5,26 @@
     (mouseover)="onmovein.next(note)"
     (mouseleave)="onmoveout.next(note)">
     <div *ngIf="!note.name.endsWith('#')" class="note-settings">
-        <input type="range" orient="vertical" (input)="changeFrequency($event)" min="260"
-            max="540" [value]="note.currentFrequency" />
+        <input type="range" orient="vertical" (input)="onSliderChange($event)" min="260"
+            max="500" [value]="note.currentFrequency" />
         <div class="note-index">
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;540</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;470</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;400</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;330</span>
+            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;500</span>
+            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;440</span>
+            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;380</span>
+            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;320</span>
             <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;260</span>
         </div>
     </div>
-    <span class="current-frequency" *ngIf="!note.name.endsWith('#')">{{this.note.currentFrequency | number: '1.0-0'}} Hz</span>
-    <div class="note-name">
-        {{note.name}}
+    <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+        <button mat-icon-button class="small-icon-button" (click)="lower()">
+            <mat-icon>remove</mat-icon>
+        </button>
+        <span>{{this.note.currentFrequency | number: '1.0-0'}} Hz</span>
+        <button mat-icon-button class="small-icon-button" (click)="higher()">
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
+    <!--<div class="note-name">
+        {{note.name}}
+    </div>-->
 </div>
