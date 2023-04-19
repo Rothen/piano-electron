@@ -53,7 +53,8 @@ export class SongPlayerService {
         }
 
         const songNote = songNotes[currentIndex];
-        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent).playNoteFor((songNote.tact * song.tact - song.tact / 2), songNote.octave);
+        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent)
+            .playNoteFor((songNote.tact * song.tact - song.tact / 2), songNote.octave);
 
         this.timeout = setTimeout(() => {
             this.playCustomRecursive(song, songNotes, currentIndex + 1, noteComponents);
