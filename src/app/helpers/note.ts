@@ -9,7 +9,7 @@ export interface Note {
 }
 
 export const NOTES: Note[] = [{
-    name: 'C3',
+    name: 'C',
     midiNote: 1,
     octave: 3,
     frequency: 261.625565300598634,

@@ -6,6 +6,7 @@ import { NoteComponent } from '../../note/note.component';
 interface SongNote {
     tact: number;
     noteIndex: number;
+    octave: number;
 }
 
 @Injectable({
@@ -39,7 +40,8 @@ export class SongPlayerService {
     private getSongNotes(song: Song): SongNote[] {
         const songNotes: SongNote[] = song.notes.split(';').map(el => ({
             tact: parseInt(el.charAt(0), 10),
-            noteIndex: NOTES.findIndex(note => note.name === el.substring(1))
+            noteIndex: NOTES.findIndex(note => note.name === el.substring(1, el.length - 1)),
+            octave: parseInt(el.charAt(el.length-1), 10)-2
         }));
 
         return songNotes;
@@ -51,7 +53,7 @@ export class SongPlayerService {
         }
 
         const songNote = songNotes[currentIndex];
-        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent).playNoteFor((songNote.tact * song.tact - song.tact / 2));
+        (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent).playNoteFor((songNote.tact * song.tact - song.tact / 2), songNote.octave);
 
         this.timeout = setTimeout(() => {
             this.playCustomRecursive(song, songNotes, currentIndex + 1, noteComponents);
@@ -65,7 +67,7 @@ export class SongPlayerService {
 
         const songNote = songNotes[currentIndex];
         (noteComponents.get(songNotes[currentIndex].noteIndex) as NoteComponent)
-            .playCorrectNoteFor((songNote.tact * song.tact - song.tact / 2));
+            .playCorrectNoteFor((songNote.tact * song.tact - song.tact / 2), songNote.octave);
 
         this.timeout = setTimeout(() => {
             this.playRecursive(song, songNotes, currentIndex + 1, noteComponents);
