@@ -4,6 +4,7 @@ export interface Song {
     groundstroke: number;
     secondsPerTact: number;
     notes: string;
+    baseOctave: number;
 }
 
 export const SONGS: Song[] = [{
@@ -11,65 +12,69 @@ export const SONGS: Song[] = [{
     countingTime: 2,
     groundstroke: 4,
     secondsPerTact: 2,
+    baseOctave: 3,
     notes:
-'8C3;8D3;8E3;8F3;\
-4G3;4G3;\
-8A3;8A3;8A3;8A3;\
-4G3;4P;\
-8A3;8A3;8A3;8A3;\
-4G3;4P;\
-8F3;8F3;8F3;8F3;\
-4E3;4E3;\
-8D3;8D3;8D3;8D3;\
-4C3'
+'8C;8D;8E;8F;\
+4G;4G;\
+8A;8A;8A;8A;\
+4G;4P;\
+8A;8A;8A;8A;\
+4G;4P;\
+8F;8F;8F;8F;\
+4E;4E;\
+8D;8D;8D;8D;\
+4C'
 }, {
     name: 'Hänsel und Gretel',
     countingTime: 4,
     groundstroke: 4,
     secondsPerTact: 3,
+    baseOctave: 3,
     notes:
-'4G3;8E3;8F3;4G3;8E3;8C3;\
-8D3;8D3;8D3;8E3;4C3;4P;\
-4G3;8E3;8F3;4G3;8E3;8C3;\
-8D3;8D3;8D3;8E3;4C3;8P;8C3;\
-8D3;8D3;8D3;8E3;4F3;8D3;8D3;\
-8E3;8E3;8E3;8F3;4G3;4P;\
-4G3;8E3;8F3;4G3;8E3;8C3;\
-8D3;8D3;8D3;8E3;4C3'
+'4G;8E;8F;4G;8E;8C;\
+8D;8D;8D;8E;4C;4P;\
+4G;8E;8F;4G;8E;8C;\
+8D;8D;8D;8E;4C;8P;8C;\
+8D;8D;8D;8E;4F;8D;8D;\
+8E;8E;8E;8F;4G;4P;\
+4G;8E;8F;4G;8E;8C;\
+8D;8D;8D;8E;4C'
 }, {
     name: 'Ist ein Mann in\'n Brunnen gefallen',
     countingTime: 4,
     groundstroke: 4,
     secondsPerTact: 1.5,
+    baseOctave: 3,
     notes:
-'4C3;4D3;4E3;4F3;\
-4G3;4G3;4G3;4G3;\
-4C3;4D3;4E3;4F3;\
-2G3;2G3;\
-4C3;4D3;4E3;4F3;\
-4G3;4G3;4G3;4G3;\
-4G3;4F3;4E3;4D3;\
-2C3;2C3'
+'4C;4D;4E;4F;\
+4G;4G;4G;4G;\
+4C;4D;4E;4F;\
+2G;2G;\
+4C;4D;4E;4F;\
+4G;4G;4G;4G;\
+4G;4F;4E;4D;\
+2C;2C'
 }, {
     name: 'Hedwig\'s Theme',
     countingTime: 3,
     groundstroke: 4,
     secondsPerTact: 1.5,
+    baseOctave: 3,
     notes:
-'4H2;\
-4E.3;8G3;4#F3;\
-2E3;4H3;\
-2A.3;\
-2#F.3;\
-4E.3;8G3;4#F3;\
-2bE3;4F3;\
-2H.2;\
-2P;4H2;\
-4E.3;8G3;4#F3;\
-2E3;4H3;\
-2D4;4bD4;\
-2C4;4bA3;\
-4C.4;8H3;4bH3;\
-2bH2;4G3;\
-2E.3'
+'4H-1;\
+4E.;8G;4#F;\
+2E;4H;\
+2A.;\
+2#F.;\
+4E.;8G;4#F;\
+2bE;4F;\
+2H.-1;\
+2P;4H-1;\
+4E.;8G;4#F;\
+2E;4H;\
+2D1;4bD1;\
+2C1;4bA;\
+4C.1;8H;4bH;\
+2bH-1;4G;\
+2E.'
 }];

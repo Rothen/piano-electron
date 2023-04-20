@@ -9,11 +9,22 @@ interface SongNote {
     octave: number;
 }
 
+interface NoteGroups {
+    halfNote: string;
+    length: string;
+    longer: string;
+    negativeOctave: string;
+    note: string;
+    octave: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class SongPlayerService {
     private timeout: NodeJS.Timeout;
+    private noteRegex =
+    /^(?<length>\d+)(?<halfNote>b|\#)?(?<note>P|C|D|E|F|G|A|H)(?<longer>\.)?(?<negativeOctave>-)?(?<octave>\d+)?$/;
 
     constructor() { }
 
@@ -37,10 +48,16 @@ export class SongPlayerService {
     }
 
     private getSongNotes(song: Song): SongNote[] {
-        const songNotes: SongNote[] = song.notes.split(';').map(el => {
-            let tact = 1/parseInt(el.charAt(0), 10);
+        const songNotes: SongNote[] = song.notes.split(';').map(noteStr => {
+            const matches: NoteGroups = noteStr.match(this.noteRegex).groups as any as NoteGroups;
+            const length = parseInt(matches.length, 10);
+            let tact = 1 / length;
 
-            if (el.substring(1) === 'P') {
+            if (matches.longer) {
+                tact *= 1.5;
+            }
+
+            if (matches.note === 'P') {
                 return {
                     tact,
                     noteIndex: null,
@@ -48,26 +65,23 @@ export class SongPlayerService {
                 };
             }
 
-            let octave = parseInt(el.charAt(el.length - 1), 10) - 2;
-            let noteName = el.substring(1, el.length - 1);
-
-            if (noteName.endsWith('.')) {
-                tact *= 1.5;
-                noteName = noteName.replace('.', '');
+            let octave = song.baseOctave - 2;
+            let octaveModifier = (matches.octave) ? parseInt(matches.octave, 10) : 0;
+            if (matches.negativeOctave) {
+                octaveModifier *= -1;
             }
+            octave += octaveModifier;
 
             let lower = false;
             let higher = false;
 
-            if (noteName.startsWith('b')) {
-                noteName = noteName.replace('b', '');
+            if (matches.halfNote === 'b') {
                 lower = true;
-            } else if (noteName.startsWith('#')) {
-                noteName = noteName.replace('#', '');
+            } else if (matches.halfNote === '#') {
                 higher = true;
             }
 
-            let noteIndex = NOTES.findIndex(note => note.name === noteName);
+            let noteIndex = NOTES.findIndex(note => note.name === matches.note);
 
             if (lower) {
                 if (noteIndex === 0) {
