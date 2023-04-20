@@ -93,7 +93,6 @@ export class NoteComponent implements OnInit, OnDestroy {
     }
 
     public higher(): void {
-        console.log(this.note.currentFrequency);
         this.note.currentFrequency = Math.min(500, this.note.currentFrequency+1);
         this.changeFrequency();
     }
