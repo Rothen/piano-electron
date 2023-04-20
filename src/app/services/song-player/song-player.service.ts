@@ -8,8 +8,7 @@ interface SongNote {
     realTact: number;
     noteIndex: number;
     octave: number;
-    holdTill: number;
-    holdTillSongNote: SongNote;
+    tie: boolean;
     releaseSongNote: SongNote;
 }
 
@@ -20,8 +19,7 @@ interface NoteGroups {
     negativeOctave: string;
     note: string;
     octave: string;
-    hold: string;
-    holdTill: string;
+    tie: string;
 }
 
 @Injectable({
@@ -30,7 +28,7 @@ interface NoteGroups {
 export class SongPlayerService {
     private timeout: NodeJS.Timeout;
     /*eslint max-len: ["error", { "code": 800 }]*/
-    private noteRegex = /^(?<length>\d+)(?<halfNote>b|\#)?(?<note>P|C|D|E|F|G|A|H)(?<longer>\.)?(?<negativeOctave>-)?(?<octave>\d+)?(?<hold>,)?(?<holdTill>\d+)?$/;
+    private noteRegex = /^(?<length>\d+)(?<halfNote>b|\#)?(?<note>P|C|D|E|F|G|A|H)(?<longer>\.)?(?<negativeOctave>-)?(?<octave>\d+)?(?<tie>,)?$/;
 
     constructor() { }
 
@@ -53,7 +51,7 @@ export class SongPlayerService {
         }
     }
 
-    private getSongNotes(song: Song): SongNote[] {
+    private parseSongNotes(song: Song): SongNote[] {
         const songNotes: SongNote[] = song.notes.split(';').map(noteStr => {
             const matches: NoteGroups = noteStr.match(this.noteRegex).groups as any as NoteGroups;
             const length = parseInt(matches.length, 10);
@@ -69,8 +67,7 @@ export class SongPlayerService {
                     realTact: tact,
                     noteIndex: null,
                     octave: null,
-                    holdTill: 0,
-                    holdTillSongNote: null,
+                    tie: false,
                     releaseSongNote: null
                 };
             }
@@ -96,7 +93,7 @@ export class SongPlayerService {
             if (lower) {
                 if (noteIndex === 0) {
                     octave -= 1;
-                    noteIndex = NOTES.length-1;
+                    noteIndex = NOTES.length - 1;
                 } else {
                     noteIndex--;
                 }
@@ -109,9 +106,9 @@ export class SongPlayerService {
                 }
             }
 
-            let holdTill = 0;
-            if (matches.hold) {
-                holdTill = parseInt(matches.holdTill, 10);
+            let tie = false;
+            if (matches.tie) {
+                tie = true;
             }
 
             return {
@@ -119,29 +116,56 @@ export class SongPlayerService {
                 realTact: tact,
                 noteIndex,
                 octave,
-                holdTill,
-                holdTillSongNote: null,
+                tie,
                 releaseSongNote: null
             };
         });
 
+        return songNotes;
+    }
+
+    private handleTies(songNotes: SongNote[]): void {
         for (let i = 0; i < songNotes.length; i++) {
             const songNote = songNotes[i];
-            if (songNote.holdTill > 0) {
-                if (i + songNote.holdTill < songNotes.length) {
-                    for (let j = i+1; j <= i+songNote.holdTill; j++) {
-                        songNote.tact += songNotes[j].tact;
+            if (songNote.tie) {
+                let foundTie: SongNote = null;
+                let foundTieIndex = -1;
+                let sum = songNote.realTact;
+                for (let j = i + 1; j < songNotes.length; j++) {
+                    const tieSongNote = songNotes[j];
+                    sum += tieSongNote.realTact;
+                    if (tieSongNote.noteIndex === songNote.noteIndex && tieSongNote.octave === songNote.octave) {
+                        foundTie = tieSongNote;
+                        foundTieIndex = j;
+                        break;
                     }
-                    songNote.holdTillSongNote = songNotes[i + songNote.holdTill];
-                    songNotes[i + songNote.holdTill].noteIndex = null;
-                    songNotes[i + songNote.holdTill].octave = null;
-                    songNotes[i + songNote.holdTill].holdTill = 0;
-                    songNotes[i + songNote.holdTill].holdTillSongNote = null;
-                    songNotes[i + songNote.holdTill].releaseSongNote = null;
-                    songNotes[i + songNote.holdTill+1].releaseSongNote = songNote;
+                }
+                if (foundTie) {
+                    songNote.tact = sum;
+                    foundTie.noteIndex = null;
+                    foundTie.octave = null;
+                    foundTie.tie = false;
+                    foundTie.releaseSongNote = null;
+                    if (foundTieIndex + 1 < songNotes.length) {
+                        songNotes[foundTieIndex + 1].releaseSongNote = songNote;
+                    } else {
+                        songNotes.push({
+                            tact: 0.01,
+                            realTact: 0.01,
+                            noteIndex: null,
+                            octave: null,
+                            tie: false,
+                            releaseSongNote: null
+                        });
+                    }
                 }
             }
         }
+    }
+
+    private getSongNotes(song: Song): SongNote[] {
+        const songNotes = this.parseSongNotes(song);
+        this.handleTies(songNotes);
 
         return songNotes;
     }
@@ -154,17 +178,8 @@ export class SongPlayerService {
         const songNote = songNotes[currentIndex];
 
         if (songNote.noteIndex !== null) {
-            if (songNote.releaseSongNote) {
-                const releaseNoteComponent = (noteComponents.get(songNote.releaseSongNote.noteIndex) as NoteComponent);
-                releaseNoteComponent.stopPlayingNote(songNote.releaseSongNote.octave);
-            }
-
             const noteComponent = (noteComponents.get(songNote.noteIndex) as NoteComponent);
-            if (songNote.holdTillSongNote) {
-                noteComponent.playNote(songNote.octave);
-            } else {
-                noteComponent.playNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
-            }
+            noteComponent.playNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
         }
 
         this.timeout = setTimeout(() => {
@@ -180,17 +195,6 @@ export class SongPlayerService {
         const songNote = songNotes[currentIndex];
 
         if (songNote.noteIndex !== null) {
-            /*if (songNote.releaseSongNote) {
-                const releaseNoteComponent = (noteComponents.get(songNote.releaseSongNote.noteIndex) as NoteComponent);
-                releaseNoteComponent.stopPlayingNote(songNote.releaseSongNote.octave);
-            }
-
-            const noteComponent = (noteComponents.get(songNote.noteIndex) as NoteComponent);
-            if (songNote.holdTillSongNote) {
-                noteComponent.playCorrectNote(songNote.octave);
-            } else if (!songNote.releaseSongNote) {
-                noteComponent.playCorrectNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
-            }*/
             const noteComponent = (noteComponents.get(songNote.noteIndex) as NoteComponent);
             noteComponent.playCorrectNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
         }

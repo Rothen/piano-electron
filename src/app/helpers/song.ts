@@ -68,7 +68,7 @@ export const SONGS: Song[] = [{
 2#F.;\
 4E.;8G;4#F;\
 2bE;4F;\
-2H.-1,1;\
+2H.-1,;\
 2H-1;4H-1;\
 4E.;8G;4#F;\
 2E;4H;\
