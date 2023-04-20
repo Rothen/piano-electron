@@ -1,25 +1,75 @@
 export interface Song {
     name: string;
-    tact: number;
+    countingTime: number;
+    groundstroke: number;
+    secondsPerTact: number;
     notes: string;
 }
 
-export const SONGS = [{
+export const SONGS: Song[] = [{
     name: 'Alle meine Entchen',
-    tact: 1 / 3,
-    notes: '1C3;1D3;1E3;1F3;2G3;2G3;1A3;1A3;1A3;1A3;4G3;1A3;1A3;1A3;1A3;4G3;1F3;1F3;1F3;1F3;2E3;2E3;1D3;1D3;1D3;1D3;4C3'
+    countingTime: 2,
+    groundstroke: 4,
+    secondsPerTact: 2,
+    notes:
+'8C3;8D3;8E3;8F3;\
+4G3;4G3;\
+8A3;8A3;8A3;8A3;\
+4G3;4P;\
+8A3;8A3;8A3;8A3;\
+4G3;4P;\
+8F3;8F3;8F3;8F3;\
+4E3;4E3;\
+8D3;8D3;8D3;8D3;\
+4C3'
 }, {
     name: 'Hänsel und Gretel',
-    tact: 1 / 3,
-    notes: '2G3;1E3;1F3;2G3;1E3;1C3;1D3;1D3;1D3;1E3;4C3;2G3;1E3;1F3;2G3;1E3;1C3;1D3;1D3;1D3;1E3;4C3\
-;1C3;1D3;1D3;1D3;1E3;2F3;1D3;1D3;1E3;1E3;1E3;1F3;4G3;2G3;1E3;1F3;2G3;1E3;1C3;1D3;1D3;1D3;1E3;4C3'
+    countingTime: 4,
+    groundstroke: 4,
+    secondsPerTact: 3,
+    notes:
+'4G3;8E3;8F3;4G3;8E3;8C3;\
+8D3;8D3;8D3;8E3;4C3;4P;\
+4G3;8E3;8F3;4G3;8E3;8C3;\
+8D3;8D3;8D3;8E3;4C3;8P;8C3;\
+8D3;8D3;8D3;8E3;4F3;8D3;8D3;\
+8E3;8E3;8E3;8F3;4G3;4P;\
+4G3;8E3;8F3;4G3;8E3;8C3;\
+8D3;8D3;8D3;8E3;4C3'
 }, {
     name: 'Ist ein Mann in\'n Brunnen gefallen',
-    tact: 1 / 3,
-    notes: '1C3;1D3;1E3;1F3;1G3;1G3;1G3;1G3;1C3;1D3;1E3;1F3;2G3;2G3;1C3;1D3;1E3;1F3;1G3;1G3;1G3;1G3;1G3;1F3;1E3;1D3;2C3;2C3'
+    countingTime: 4,
+    groundstroke: 4,
+    secondsPerTact: 1.5,
+    notes:
+'4C3;4D3;4E3;4F3;\
+4G3;4G3;4G3;4G3;\
+4C3;4D3;4E3;4F3;\
+2G3;2G3;\
+4C3;4D3;4E3;4F3;\
+4G3;4G3;4G3;4G3;\
+4G3;4F3;4E3;4D3;\
+2C3;2C3'
 }, {
-    name: 'Hedwigs Theme',
-    tact: 1 / 6,
-    notes: '2E3;3A3;1C4;2H3;4A3;2E4;6D4;6H3;3A3;1C4;2H3;4G3;2H3;8E3;2E3;3A3;1C4;2H3;4A3;2E4;4G4;2F#4\
-;4F4;2C#4;3F4;1E4;2D#4;4C3;2C4;8A3'
+    name: 'Hedwig\'s Theme',
+    countingTime: 3,
+    groundstroke: 4,
+    secondsPerTact: 1.5,
+    notes:
+'4H3;\
+4E.4;8G4;4#F4;\
+2E4;4H4;\
+2A.4;\
+2#F.4;\
+4E.4;8G4;4#F4;\
+2bE4;4F4;\
+2H.3;\
+2P;4H3;\
+4E.4;8G4;4#F4;\
+2E4;4H4;\
+2D5;4bD5;\
+2C5;4bA4;\
+4C.5;8H4;4bH4;\
+2bH3;4G4;\
+2E.4'
 }];

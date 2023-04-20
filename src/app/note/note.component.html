@@ -40,7 +40,7 @@
     <div *ngIf="!note.name.endsWith('#') && showResults" class="note-name" style="color: red; margin-top: 15px;">
         {{note.currentFrequency - note.frequency | number:'1.0-0'}} Hz
     </div>
-    <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name" style="color: red; margin-top: 15px;">
+    <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name">
         &nbsp;
     </div>
 </div>
