@@ -5,6 +5,7 @@ import { NoteComponent } from '../../note/note.component';
 
 interface SongNote {
     tact: number;
+    realTact: number;
     noteIndex: number;
     octave: number;
     holdTill: number;
@@ -65,6 +66,7 @@ export class SongPlayerService {
             if (matches.note === 'P') {
                 return {
                     tact,
+                    realTact: tact,
                     noteIndex: null,
                     octave: null,
                     holdTill: 0,
@@ -114,6 +116,7 @@ export class SongPlayerService {
 
             return {
                 tact,
+                realTact: tact,
                 noteIndex,
                 octave,
                 holdTill,
@@ -126,8 +129,16 @@ export class SongPlayerService {
             const songNote = songNotes[i];
             if (songNote.holdTill > 0) {
                 if (i + songNote.holdTill < songNotes.length) {
+                    for (let j = i+1; j <= i+songNote.holdTill; j++) {
+                        songNote.tact += songNotes[j].tact;
+                    }
                     songNote.holdTillSongNote = songNotes[i + songNote.holdTill];
-                    songNotes[i + songNote.holdTill].releaseSongNote = songNote;
+                    songNotes[i + songNote.holdTill].noteIndex = null;
+                    songNotes[i + songNote.holdTill].octave = null;
+                    songNotes[i + songNote.holdTill].holdTill = 0;
+                    songNotes[i + songNote.holdTill].holdTillSongNote = null;
+                    songNotes[i + songNote.holdTill].releaseSongNote = null;
+                    songNotes[i + songNote.holdTill+1].releaseSongNote = songNote;
                 }
             }
         }
@@ -169,7 +180,7 @@ export class SongPlayerService {
         const songNote = songNotes[currentIndex];
 
         if (songNote.noteIndex !== null) {
-            if (songNote.releaseSongNote) {
+            /*if (songNote.releaseSongNote) {
                 const releaseNoteComponent = (noteComponents.get(songNote.releaseSongNote.noteIndex) as NoteComponent);
                 releaseNoteComponent.stopPlayingNote(songNote.releaseSongNote.octave);
             }
@@ -177,13 +188,15 @@ export class SongPlayerService {
             const noteComponent = (noteComponents.get(songNote.noteIndex) as NoteComponent);
             if (songNote.holdTillSongNote) {
                 noteComponent.playCorrectNote(songNote.octave);
-            } else {
+            } else if (!songNote.releaseSongNote) {
                 noteComponent.playCorrectNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
-            }
+            }*/
+            const noteComponent = (noteComponents.get(songNote.noteIndex) as NoteComponent);
+            noteComponent.playCorrectNoteFor((songNote.tact * song.secondsPerTact), songNote.octave);
         }
 
         this.timeout = setTimeout(() => {
             this.playRecursive(song, songNotes, currentIndex + 1, noteComponents);
-        }, (songNote.tact * song.secondsPerTact) * 1000);
+        }, (songNote.realTact * song.secondsPerTact) * 1000);
     }
 }
