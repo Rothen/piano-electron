@@ -58,16 +58,23 @@ export class NoteComponent implements OnInit, OnDestroy {
 
     public playCorrectNote(octave: number = 1): void {
         this.isPlaying = true;
+        if (this.oscillators.has(octave)) {
+            this.stopPlayingNote(octave);
+        }
         this.oscillators.set(octave, this.notePlayerService.playNote(this.note.frequency * Math.pow(2, octave-1)));
     }
 
     public playNote(octave: number = 1): void {
         this.isPlaying = true;
+        if (this.oscillators.has(octave)) {
+            this.stopPlayingNote(octave);
+        }
         this.oscillators.set(octave, this.notePlayerService.playNote(this.note.currentFrequency * Math.pow(2, octave-1)));
     }
 
     public stopPlayingNote(octave: number = 1): void {
         this.notePlayerService.stopPlayingNote(this.oscillators.get(octave));
+        this.oscillators.delete(octave);
         this.isPlaying = false;
     }
 

@@ -30,9 +30,9 @@ export class NotePlayerService {
     public stopPlayingNote(oscillator: OscillatorNode): void {
         const index = this.oscillators.indexOf(oscillator);
         if (index >= 0) {
+            // this.oscillators.splice(index, 1);
             const gainNode = this.gainNodes[index];
-            this.oscillators.splice(index, 1);
-            this.gainNodes.splice(index, 1);
+            // this.gainNodes.splice(index, 1);
             gainNode.gain.linearRampToValueAtTime(0., this.audioContext.currentTime + 0.5);
             oscillator.stop(this.audioContext.currentTime + 0.5);
         }
@@ -62,7 +62,7 @@ export class NotePlayerService {
         gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + time + 0.03);
         oscillator.stop(this.audioContext.currentTime + time + 0.03);
         setTimeout(() => {
-            this.oscillators.splice(this.oscillators.indexOf(oscillator), 1);
+            // this.oscillators.splice(this.oscillators.indexOf(oscillator), 1);
         }, (time + 0.03) * 1000);
     }
 
