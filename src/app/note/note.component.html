@@ -7,17 +7,25 @@
     <div *ngIf="!note.name.endsWith('#')" class="note-settings">
         <input type="range" orient="vertical" (input)="onSliderChange($event)" min="260"
             max="500" [value]="note.currentFrequency" />
-        <div class="note-index">
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;500</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;440</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;380</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;320</span>
-            <span>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;260</span>
+        <div class="note-index ticks">
+            <span>-</span>
+            <span>-</span>
+            <span>-</span>
+            <span>-</span>
+            <span>-</span>
         </div>
-        <div *ngIf="showResults" class="note-index" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}" style="left:50%;">
-            <span style="color: red; font-weight: bold; display: inline; font-size: 9pt; display: flex; align-items: center; flex-direction: row; justify-content: center;">{{note.frequency | number:'1.0-0'}}
-                <span style="height: 20px; line-height: 20px;font-size: 15pt;color: yellow; display: inline; -webkit-text-stroke: 1px red;-webkit-text-fill-color: yellow;"><mat-icon style="height: 20px; width: 20px; font-size: 20px;">close</mat-icon></span>
-            </span>
+        <div class="note-index values">
+            <span>500</span>
+            <span>440</span>
+            <span>380</span>
+            <span>320</span>
+            <span>260</span>
+        </div>
+        <div *ngIf="showResults" class="note-index result-ticks" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
+            <mat-icon>close</mat-icon>
+        </div>
+        <div *ngIf="showResults" class="note-index result-values" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
+            {{note.frequency | number:'1.0-0'}}
         </div>
     </div>
     <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">

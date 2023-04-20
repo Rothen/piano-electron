@@ -119,13 +119,49 @@ $sharp-key-translation: -20px;
             justify-content: space-between;
             width: 10px;
             top: 10px;
-            left: 50%;
             transform: translate(-16px, 0);
 
             span {
                 font-size: 10px;
                 pointer-events: none;
                 display: block;
+            }
+
+            &.ticks {
+                left: 50%;
+            }
+
+            &.values {
+                left: 75%;
+            }
+
+            &.result-values {
+                flex-direction: column;
+                color: red;
+                font-weight: bold;
+                font-size: 9pt;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                height: 20px;
+                left: 40%;
+            }
+
+            &.result-ticks {
+                height: 20px;
+                line-height: 20px;
+                font-size: 15pt;
+                color: yellow;
+                -webkit-text-stroke: 1px red;
+                -webkit-text-fill-color: yellow;
+                left: 56%;
+
+                mat-icon {
+                    height: 20px;
+                    width: 20px;
+                    font-size: 20px;
+                }
             }
         }
     }
