@@ -77,4 +77,15 @@ export const SONGS: Song[] = [{
 4C.1;8H;4bH;\
 2bH-1;4G;\
 2E.']
+}, {
+    name: 'Rick Roll',
+    countingTime: 4,
+    groundstroke: 4,
+    secondsPerTact: 2,
+    baseOctave: 3,
+    notes:
+        [
+'16C;16D;16F;16D;8A.;16A,;8A;8G,;4G;16C;16D;16F;16D;\
+8G.;16G,;8G;8F,;16F;16E;8D;16C;16D;16F;16D;4F;8G;8E,;16E;16D;4C;8C;\
+4G;2F']
 }];
