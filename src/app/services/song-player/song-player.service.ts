@@ -34,15 +34,18 @@ export class SongPlayerService {
 
     public playSong(song: Song, noteComponents: QueryList<NoteComponent>) {
         this.reset();
-        const songNotes = this.getSongNotes(song);
-        this.playRecursive(song, songNotes, 0, noteComponents);
+        const songNotesList = this.getSongNotes(song);
+        for (const songNotes of songNotesList) {
+            this.playRecursive(song, songNotes, 0, noteComponents);
+        }
     }
 
     public playSongWithCustomNotes(song: Song, noteComponents: QueryList<NoteComponent>) {
         this.reset();
-        const songNotes = this.getSongNotes(song);
-
-        this.playCustomRecursive(song, songNotes, 0, noteComponents);
+        const songNotesList = this.getSongNotes(song);
+        for (const songNotes of songNotesList) {
+            this.playCustomRecursive(song, songNotes, 0, noteComponents);
+        }
     }
 
     public reset(): void {
@@ -51,8 +54,8 @@ export class SongPlayerService {
         }
     }
 
-    private parseSongNotes(song: Song): SongNote[] {
-        const songNotes: SongNote[] = song.notes.split(';').map(noteStr => {
+    private parseSongNotes(song: Song): SongNote[][] {
+        const songNotes: SongNote[][] = song.notes.map(songNoteStr => songNoteStr.split(';').map(noteStr => {
             const matches: NoteGroups = noteStr.match(this.noteRegex).groups as any as NoteGroups;
             const length = parseInt(matches.length, 10);
             let tact = 1 / length;
@@ -119,7 +122,7 @@ export class SongPlayerService {
                 tie,
                 releaseSongNote: null
             };
-        });
+        }));
 
         return songNotes;
     }
@@ -163,9 +166,9 @@ export class SongPlayerService {
         }
     }
 
-    private getSongNotes(song: Song): SongNote[] {
-        const songNotes = this.parseSongNotes(song);
-        this.handleTies(songNotes);
+    private getSongNotes(song: Song): SongNote[][] {
+        const songNotes: SongNote[][] = this.parseSongNotes(song);
+        songNotes.forEach(songNoteList => this.handleTies(songNoteList));
 
         return songNotes;
     }

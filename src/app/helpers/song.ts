@@ -3,7 +3,7 @@ export interface Song {
     countingTime: number;
     groundstroke: number;
     secondsPerTact: number;
-    notes: string;
+    notes: string[];
     baseOctave: number;
 }
 
@@ -14,7 +14,7 @@ export const SONGS: Song[] = [{
     secondsPerTact: 2,
     baseOctave: 3,
     notes:
-'8C;8D;8E;8F;\
+        ['8C;8D;8E;8F;\
 4G;4G;\
 8A;8A;8A;8A;\
 4G;4P;\
@@ -23,7 +23,7 @@ export const SONGS: Song[] = [{
 8F;8F;8F;8F;\
 4E;4E;\
 8D;8D;8D;8D;\
-4C'
+4C']
 }, {
     name: 'Hänsel und Gretel',
     countingTime: 4,
@@ -31,14 +31,14 @@ export const SONGS: Song[] = [{
     secondsPerTact: 3,
     baseOctave: 3,
     notes:
-'4G;8E;8F;4G;8E;8C;\
+        ['4G;8E;8F;4G;8E;8C;\
 8D;8D;8D;8E;4C;4P;\
 4G;8E;8F;4G;8E;8C;\
 8D;8D;8D;8E;4C;8P;8C;\
 8D;8D;8D;8E;4F;8D;8D;\
 8E;8E;8E;8F;4G;4P;\
 4G;8E;8F;4G;8E;8C;\
-8D;8D;8D;8E;4C'
+8D;8D;8D;8E;4C']
 }, {
     name: 'Ist ein Mann in\'n Brunnen gefallen',
     countingTime: 4,
@@ -46,14 +46,14 @@ export const SONGS: Song[] = [{
     secondsPerTact: 1.5,
     baseOctave: 3,
     notes:
-'4C;4D;4E;4F;\
+        ['4C;4D;4E;4F;\
 4G;4G;4G;4G;\
 4C;4D;4E;4F;\
 2G;2G;\
 4C;4D;4E;4F;\
 4G;4G;4G;4G;\
 4G;4F;4E;4D;\
-2C;2C'
+2C;2C']
 }, {
     name: 'Hedwig\'s Theme',
     countingTime: 3,
@@ -61,7 +61,7 @@ export const SONGS: Song[] = [{
     secondsPerTact: 1.5,
     baseOctave: 3,
     notes:
-'4H-1;\
+        ['4H-1;\
 4E.;8G;4#F;\
 2E;4H;\
 2A.;\
@@ -76,5 +76,5 @@ export const SONGS: Song[] = [{
 2C1;4bA;\
 4C.1;8H;4bH;\
 2bH-1;4G;\
-2E.'
+2E.']
 }];
