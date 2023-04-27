@@ -9,7 +9,7 @@ import { SongParser } from '../../helpers/song-parser';
     providedIn: 'root'
 })
 export class SongPlayerService {
-    private timeout: NodeJS.Timeout;
+    private timeoutId: NodeJS.Timeout;
 
     constructor() { }
 
@@ -17,7 +17,7 @@ export class SongPlayerService {
         this.reset();
         const songNotesList = SongParser.parseSongNotes(song);
         for (const songNotes of songNotesList) {
-            let fn = null;
+            let fn: (noteComponent: NoteComponent, tact: number, octave: number) => void = null;
             if (correctNotes) {
                 fn = (noteComponent: NoteComponent, tact: number, octave: number) => noteComponent.playCorrectNoteFor(tact, octave);
             } else {
@@ -28,8 +28,8 @@ export class SongPlayerService {
     }
 
     public reset(): void {
-        if (this.timeout) {
-            clearTimeout(this.timeout);
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
         }
     }
 
@@ -46,7 +46,7 @@ export class SongPlayerService {
             fn(noteComponent, (songNote.tact * song.secondsPerTact), songNote.octave);
         }
 
-        this.timeout = setTimeout(() => {
+        this.timeoutId = setTimeout(() => {
             this.playRecursive(song, songNotes, currentIndex + 1, noteComponents, fn);
         }, (songNote.realTact * song.secondsPerTact) * 1000);
     }
