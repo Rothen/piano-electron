@@ -83,11 +83,11 @@ export class AppComponent implements OnInit {
     }
 
     public playSong() {
-        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents);
+        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents, true);
     }
 
     public playSongWithCustomNotes() {
-        this.songPlayerService.playSongWithCustomNotes(this.selectedSong, this.noteCompnents);
+        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents, false);
     }
 
     public calculateScore(): number {
