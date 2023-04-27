@@ -1,9 +1,10 @@
 import { Injectable, QueryList } from '@angular/core';
 import { Song } from '../../helpers/song';
-import { NOTES } from '../../helpers/note';
 import { NoteComponent } from '../../note/note.component';
 import { SongNote } from '../../helpers/song-note';
 import { SongParser } from '../../helpers/song-parser';
+
+type PlaySongNoteFn = (noteComponent: NoteComponent, tact: number, octave: number) => void;
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class SongPlayerService {
         this.reset();
         const songNotesList = SongParser.parseSongNotes(song);
         for (const songNotes of songNotesList) {
-            let fn: (noteComponent: NoteComponent, tact: number, octave: number) => void = null;
+            let fn: PlaySongNoteFn = null;
             if (correctNotes) {
                 fn = (noteComponent: NoteComponent, tact: number, octave: number) => noteComponent.playCorrectNoteFor(tact, octave);
             } else {
@@ -34,7 +35,7 @@ export class SongPlayerService {
     }
 
     private playRecursive(song: Song, songNotes: SongNote[], currentIndex: number, noteComponents: QueryList<NoteComponent>,
-        fn: (noteComponent: NoteComponent, tact: number, octave: number) => void): void {
+        fn: PlaySongNoteFn): void {
         if (currentIndex >= songNotes.length) {
             return;
         }
