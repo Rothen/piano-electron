@@ -22,8 +22,10 @@ export class AppComponent implements OnInit {
     public notes: Note[] = NOTES;
     public pressedNote: Note | null = null;
     public score: number = null;
+    public scoreText: string = null;
     public systemVolume = 0;
     public showResults = false;
+    public selectedPlayType = 'custom';
 
     private isBlocked = false;
 
@@ -83,33 +85,41 @@ export class AppComponent implements OnInit {
     }
 
     public playSong() {
-        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents, true);
-    }
-
-    public playSongWithCustomNotes() {
-        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents, false);
+        this.songPlayerService.playSong(this.selectedSong, this.noteCompnents, this.selectedPlayType === 'correct');
     }
 
     public calculateScore(): number {
-        this.showResults = true;
-        let maxError = 0;
-        let currentError = 0;
+        let score = 0;
 
         for (const note of this.notes) {
-            const furthestNote = note.frequency <= 400 ? 260 : 540;
-            maxError += Math.abs(furthestNote - note.currentFrequency);
-            currentError += Math.abs(note.currentFrequency - note.frequency);
+            score += Math.abs(note.frequency - note.currentFrequency);
         }
 
-        const error = currentError / maxError;
-        const score = Math.round((1 - error) * 100);
+        score = Math.round(score);
+
+        if (score < 2) {
+            this.scoreText = 'Wow, perfekt eingestellt!';
+        } else if (score < 10) {
+            this.scoreText = 'Ausgezeichnet gestimmt! Gratuliere!';
+        } else if (score < 20) {
+            this.scoreText = 'Super gemacht! Tönt fast perfekt!';
+        } else if (score < 30) {
+            this.scoreText = 'Nicht schlecht, aber hör nochmals genau hin!';
+        } else {
+            this.scoreText = 'Schöne Melodie, aber fast wie Katzenmusik. Probiere es doch noch einmal!';
+        }
 
         this.score = score;
+        this.showResults = true;
 
         return score;
     }
 
     public reset(): void {
+        this.showResults = false;
+    }
+
+    public hardReset(): void {
         this.showResults = false;
         this.songPlayerService.reset();
         this.score = null;

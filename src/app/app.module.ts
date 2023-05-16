@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { FormsModule } from '@angular/forms';
         MatSliderModule,
         MatIconModule,
         MatTooltipModule,
-        FormsModule
+        FormsModule,
+        MatRadioModule
     ],
     providers: [],
     bootstrap: [AppComponent]

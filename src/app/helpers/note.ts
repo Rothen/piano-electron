@@ -5,6 +5,7 @@ export interface Note {
     frequency: number;
     currentFrequency: number;
     playing: boolean;
+    disabled: boolean;
     hasSharpBefore?: boolean;
 }
 
@@ -13,15 +14,17 @@ export const NOTES: Note[] = [{
     midiNote: 1,
     octave: 3,
     frequency: 261.625565300598634,
-    currentFrequency: 260,
-    playing: false
+    currentFrequency: 262,
+    playing: false,
+    disabled: true
 }, {
     name: 'C#',
     midiNote: 1,
     octave: 3,
     frequency: 277.1826,
     currentFrequency: 277.1826,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'D',
     midiNote: 2,
@@ -29,6 +32,7 @@ export const NOTES: Note[] = [{
     frequency: 293.664767917407560,
     currentFrequency: 260,
     playing: false,
+    disabled: false,
     hasSharpBefore: true
 }, {
     name: 'D#',
@@ -36,7 +40,8 @@ export const NOTES: Note[] = [{
     octave: 3,
     frequency: 311.1270,
     currentFrequency: 311.1270,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'E',
     midiNote: 3,
@@ -44,6 +49,7 @@ export const NOTES: Note[] = [{
     frequency: 329.627556912869929,
     currentFrequency: 260,
     playing: false,
+    disabled: false,
     hasSharpBefore: true
 }, {
     name: 'F',
@@ -51,14 +57,16 @@ export const NOTES: Note[] = [{
     octave: 3,
     frequency: 349.228231433003884,
     currentFrequency: 260,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'F#',
     midiNote: 4,
     octave: 3,
     frequency: 369.9944,
     currentFrequency: 369.9944,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'G',
     midiNote: 5,
@@ -66,6 +74,7 @@ export const NOTES: Note[] = [{
     frequency: 391.995435981749294,
     currentFrequency: 260,
     playing: false,
+    disabled: false,
     hasSharpBefore: true
 }, {
     name: 'G#',
@@ -73,7 +82,8 @@ export const NOTES: Note[] = [{
     octave: 3,
     frequency: 415.3047,
     currentFrequency: 415.3047,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'A',
     midiNote: 6,
@@ -81,6 +91,7 @@ export const NOTES: Note[] = [{
     frequency: 440.0000,
     currentFrequency: 260,
     playing: false,
+    disabled: false,
     hasSharpBefore: true
 }, {
     name: 'A#',
@@ -88,7 +99,8 @@ export const NOTES: Note[] = [{
     octave: 3,
     frequency: 466.1638,
     currentFrequency: 466.1638,
-    playing: false
+    playing: false,
+    disabled: false
 }, {
     name: 'H',
     midiNote: 7,
@@ -96,6 +108,7 @@ export const NOTES: Note[] = [{
     frequency: 493.8833,
     currentFrequency: 260,
     playing: false,
+    disabled: false,
     hasSharpBefore: true
 }/*, {
     name: 'C4',

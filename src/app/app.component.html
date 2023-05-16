@@ -6,7 +6,60 @@
             (onmovein)="noteEntered($event)"
             [showResults]="showResults"></app-note>
     </div>
-    <div style="display: flex; align-items: center;flex-direction: row; justify-content: end; width: 100%;">
+
+    <div *ngIf="!showResults" style="display: flex; flex-direction: row; align-items: center; width: 740px; justify-content: space-between;">
+        <div style="display: flex; flex-direction: column; align-items: left;">
+            <div style="display: flex; flex-direction: row; align-items: center;">
+                <mat-form-field appearance="fill">
+                    <mat-label>Lied</mat-label>
+                    <mat-select [(value)]="selectedSong">
+                        <mat-option *ngFor="let song of songs" [value]="song">
+                            {{song.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" (click)="playSong()">Abspielen</button>
+                <mat-radio-group [(ngModel)]="selectedPlayType" aria-labelledby="example-radio-group-label" class="example-radio-group" style="display: flex; flex-direction: column; margin: 15px 0; align-items: flex-start;">
+                    <mat-radio-button class="example-radio-button" value="custom">
+                        Eigene Einstellung
+                    </mat-radio-button>
+                    <mat-radio-button class="example-radio-button" value="correct">
+                        Richtige Einstellung
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="systemVolumeService.isElectron"
+                style="display: flex; flex-direction: row; align-items: center; width: 400px;">
+                <input type="range" min="0" max="100" step="1" list="steplist" [(ngModel)]="systemVolume"
+                    (change)="onSystemVolumeChanged($event)">
+                <datalist id="steplist">
+                    <option>0</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>75</option>
+                    <option>100</option>
+                </datalist>
+                <mat-icon>volume_down</mat-icon>
+                <span>{{systemVolume}}</span>
+            </div>
+        </div>
+        <button mat-raised-button color="accent" (click)="calculateScore();">Überprüfen</button>
+    </div>
+
+    <div *ngIf="showResults" style="display: flex; flex-direction: row; align-items: center; width: 740px; justify-content: space-between;">
+        <div style="display: flex; flex-direction: column; align-items: left; text-align: center;">
+            <h2>Gesamtabweichung von der richtigen Tonleiter:</h2>
+            <h3>{{score}} Hz</h3>
+            <p>{{scoreText}}</p>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <button mat-raised-button color="accent" (click)="reset();">Nochmals anpassen</button>
+            <button mat-raised-button color="accent" (click)="hardReset();">Von Vorne anfangen</button>
+        </div>
+    </div>
+
+
+    <!--<div style="display: flex; align-items: center;flex-direction: row; justify-content: end; width: 100%;">
         <div>
             <mat-form-field appearance="fill">
                 <mat-label>Lied</mat-label>
@@ -38,4 +91,4 @@
         <button mat-raised-button color="warn" (click)="reset()">Zurücksetzen</button>
     </div>
     <h1>{{score !== null ? score + ' Punkte' : ''}}</h1>
-</div>
+</div>-->

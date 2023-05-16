@@ -23,6 +23,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     @Output() frequencyChanged: EventEmitter<number> = new EventEmitter();
 
     public isPlaying = false;
+    public isPlayingCorrectNote = false;
 
     private oscillators: Map<number, OscillatorNode> = new Map();
     private autoOscillators: Map<number, OscillatorNode> = new Map();
@@ -46,6 +47,7 @@ export class NoteComponent implements OnInit, OnDestroy {
 
     public playCorrectNoteFor(time: number, octave: number = 1): void {
         this.isPlaying = true;
+        this.isPlayingCorrectNote = true;
         this.notePlayerService.playNoteFor(this.note.frequency * Math.pow(2, octave-1), time);
         setTimeout(_  => this.isPlaying = false, time*1000);
     }

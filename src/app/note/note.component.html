@@ -1,12 +1,8 @@
 <div class="key {{note.name.replace('#', '-sharp')}}"
-    [ngClass]="{'active': isPlaying, 'sharp': note.name.endsWith('#'), 'has-sharp-before': note.hasSharpBefore}"
-    (mousedown)="onpress.next(note)"
-    (mouseup)="onrelease.next(note)"
-    (mouseover)="onmovein.next(note)"
-    (mouseleave)="onmoveout.next(note)">
+    [ngClass]="{'active': isPlaying, 'sharp': note.name.endsWith('#'), 'has-sharp-before': note.hasSharpBefore}">
     <div *ngIf="!note.name.endsWith('#')" class="note-settings">
         <input type="range" orient="vertical" (input)="onSliderChange($event)" min="260"
-            max="500" [value]="note.currentFrequency" />
+            max="500" [value]="note.currentFrequency" [disabled]="note.disabled"/>
         <div class="note-index ticks">
             <span>-</span>
             <span>-</span>
@@ -28,19 +24,25 @@
             {{note.frequency | number:'1.0-0'}}
         </div>
     </div>
-    <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-        <button mat-icon-button class="small-icon-button" (click)="lower()">
+    <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-around; align-items: center;">
+        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="lower()">
             <mat-icon>remove</mat-icon>
         </button>
         <span>{{this.note.currentFrequency | number: '1.0-0'}} Hz</span>
-        <button mat-icon-button class="small-icon-button" (click)="higher()">
+        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="higher()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
-    <div *ngIf="!note.name.endsWith('#') && showResults" class="note-name" style="color: red; margin-top: 15px;">
-        {{note.currentFrequency - note.frequency | number:'1.0-0'}} Hz
-    </div>
-    <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name">
-        &nbsp;
+    <div *ngIf="!note.name.endsWith('#')" class="event-area" style="height: 50px; padding-top: 20px;"
+        (mousedown)="onpress.next(note)"
+        (mouseup)="onrelease.next(note)"
+        (mouseover)="onmovein.next(note)"
+        (mouseleave)="onmoveout.next(note)">
+        <div *ngIf="!note.name.endsWith('#') && showResults" class="note-name" style="color: red; margin-top: 15px;">
+            {{note.currentFrequency - note.frequency | number:'1.0-0'}} Hz
+        </div>
+        <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name">
+            &nbsp;
+        </div>
     </div>
 </div>
