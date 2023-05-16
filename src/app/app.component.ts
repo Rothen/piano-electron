@@ -125,7 +125,7 @@ export class AppComponent implements OnInit {
         this.score = null;
 
         for (const note of this.notes) {
-            if (note.name.indexOf('#') === -1) {
+            if (note.name.indexOf('#') === -1 && note.name !== 'C') {
                 note.currentFrequency = 260;
             }
         }
