@@ -2,7 +2,7 @@
     [ngClass]="{'active': isPlaying, 'sharp': note.name.endsWith('#'), 'has-sharp-before': note.hasSharpBefore}">
     <div *ngIf="!note.name.endsWith('#')" class="note-settings">
         <input type="range" orient="vertical" (input)="onSliderChange($event)" min="260"
-            max="500" [value]="note.currentFrequency" [disabled]="note.disabled"/>
+            max="500" [value]="note.currentFrequency" [disabled]="note.disabled || showResults"/>
         <div class="note-index ticks">
             <span>-</span>
             <span>-</span>
@@ -17,19 +17,19 @@
             <span>320</span>
             <span>260</span>
         </div>
-        <div *ngIf="showResults" class="note-index result-ticks" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
+        <div *ngIf="showResults && isRelevant()" class="note-index result-ticks" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
             <mat-icon>close</mat-icon>
         </div>
-        <div *ngIf="showResults" class="note-index result-values" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
+        <div *ngIf="showResults && isRelevant()" class="note-index result-values" [ngStyle]="{ 'top': 140/240*(500-note.frequency)+6+'px'}">
             {{note.frequency | number:'1.0-0'}}
         </div>
     </div>
     <div class="current-frequency" *ngIf="!note.name.endsWith('#')" style="display: flex; flex-direction: row; justify-content: space-around; align-items: center;">
-        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="lower()">
+        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="lower()" [disabled]="showResults">
             <mat-icon>remove</mat-icon>
         </button>
         <span>{{this.note.currentFrequency | number: '1.0-0'}} Hz</span>
-        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="higher()">
+        <button *ngIf="!note.disabled" mat-mini-fab color="primary" style="box-shadow: none !important;" class="small-icon-button" (click)="higher()" [disabled]="showResults">
             <mat-icon>add</mat-icon>
         </button>
     </div>
@@ -38,7 +38,7 @@
         (mouseup)="onrelease.next(note)"
         (mouseover)="onmovein.next(note)"
         (mouseleave)="onmoveout.next(note)">
-        <div *ngIf="!note.name.endsWith('#') && showResults" class="note-name" style="color: red; margin-top: 15px;">
+        <div *ngIf="!note.name.endsWith('#') && showResults && isRelevant()" class="note-name" style="color: red; margin-top: 15px;">
             {{note.currentFrequency - note.frequency | number:'1.0-0'}} Hz
         </div>
         <div *ngIf="note.name.endsWith('#') || !showResults" class="note-name">

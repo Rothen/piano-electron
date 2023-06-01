@@ -92,7 +92,9 @@ export class AppComponent implements OnInit {
         let score = 0;
 
         for (const note of this.notes) {
-            score += Math.abs(note.frequency - note.currentFrequency);
+            if (this.selectedSong.relevantKeys.indexOf(note.name) > -1) {
+                score += Math.abs(note.frequency - note.currentFrequency);
+            }
         }
 
         score = Math.round(score);
@@ -101,9 +103,9 @@ export class AppComponent implements OnInit {
             this.scoreText = 'Wow, perfekt eingestellt!';
         } else if (score < 10) {
             this.scoreText = 'Ausgezeichnet gestimmt! Gratuliere!';
-        } else if (score < 20) {
-            this.scoreText = 'Super gemacht! Tönt fast perfekt!';
         } else if (score < 30) {
+            this.scoreText = 'Super gemacht! Tönt fast perfekt!';
+        } else if (score < 50) {
             this.scoreText = 'Nicht schlecht, aber hör nochmals genau hin!';
         } else {
             this.scoreText = 'Schöne Melodie, aber fast wie Katzenmusik. Probiere es doch noch einmal!';

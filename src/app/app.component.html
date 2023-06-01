@@ -5,7 +5,8 @@
             (onpress)="notePressed($event)"
             (onrelease)="noteReleased($event)"
             (onmovein)="noteEntered($event)"
-            [showResults]="showResults"></app-note>
+            [showResults]="showResults"
+            [selectedSong]="selectedSong"></app-note>
     </div>
 
     <div *ngIf="!showResults" style="display: flex; flex-direction: row; align-items: center; width: 740px; justify-content: space-between;">

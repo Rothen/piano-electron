@@ -3,6 +3,7 @@ import { Note } from '../helpers/note';
 import { MidiKeyboardService, NoteEvent } from '../services/midi-keyboard/midi-keyboard.service';
 import { Subscription } from 'rxjs';
 import { NotePlayerService } from '../services/note-player/note-player.service';
+import { Song } from '../helpers/song';
 
 @Component({
     selector: 'app-note',
@@ -15,6 +16,7 @@ export class NoteComponent implements OnInit, OnDestroy {
     @Input() audioContext: AudioContext;
     @Input() gainNode: GainNode;
     @Input() showResults: boolean;
+    @Input() selectedSong: Song;
 
     @Output() onpress: EventEmitter<any> = new EventEmitter();
     @Output() onrelease: EventEmitter<any> = new EventEmitter();
@@ -109,6 +111,10 @@ export class NoteComponent implements OnInit, OnDestroy {
     public lower(): void {
         this.note.currentFrequency = Math.max(260, this.note.currentFrequency-1);
         this.changeFrequency();
+    }
+
+    public isRelevant(): boolean {
+        return this.selectedSong.relevantKeys.indexOf(this.note.name) > -1;
     }
 
     private noteOn(noteEvent: NoteEvent): void {
