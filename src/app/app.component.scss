@@ -20,6 +20,14 @@ button {
     overflow: hidden;
     padding: 0;
     margin: 0;
+
+    .deviation-label {
+        position: fixed;
+        top: 237px;
+        left: 50%;
+        transform: translate(-470px);
+        color: red;
+    }
 }
 
 ::ng-deep .octave {

@@ -1,5 +1,6 @@
 <div class="container" (mouseup)="noteReleased(null)">
     <div class="keyboard">
+        <span *ngIf="showResults" class="deviation-label">Abweichung</span>
         <app-note *ngFor="let note of notes" [note]="note"
             (onpress)="notePressed($event)"
             (onrelease)="noteReleased($event)"
