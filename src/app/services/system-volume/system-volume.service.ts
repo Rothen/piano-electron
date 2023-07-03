@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as loudness from 'loudness';
+import * as loudness from 'mwl-loudness';
 import { Observable, from } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class SystemVolumeService {
 
     constructor() {
         if (this.isElectron) {
-            this.loudness = window.require('loudness');
+            this.loudness = window.require('mwl-loudness');
         }
     }
 
